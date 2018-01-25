@@ -37,11 +37,31 @@ Rails.application.configure do
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
 
+  config.action_mailer.delivery_method = :smtp
 
+  # config.action_mailer.delivery_method = :letter_opener
+
+  # config.action_mailer.smtp_settings = {
+  # address:              'smtp.gmail.com',
+  # port:                  587,
+  # domain:               'gmail.com',
+  # user_name:             Rails.application.secrets.email[:my_gmail],
+  # password:              Rails.application.secrets.email[:my_password],
+  # authentication:       'plain',
+  # enable_starttls_auto: true }
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  config.action_mailer.smtp_settings = {
+    :address              => Rails.application.secrets.email[:address],
+    :port                 => Rails.application.secrets.email[:port],
+    :user_name            => Rails.application.secrets.email[:username],
+    :password             => Rails.application.secrets.email[:password],
+    :authentication       => Rails.application.secrets.email[:authentication],
+    :enable_starttls_auto => Rails.application.secrets.email[:enable_starttls_auto]
+  }
 end

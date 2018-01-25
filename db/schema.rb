@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180116081321) do
+ActiveRecord::Schema.define(version: 20180125141118) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "company_admins", force: :cascade do |t|
     t.string "username"
-    t.string "password"
+    t.string "password_digest"
     t.string "email"
     t.string "companyname"
     t.datetime "created_at", null: false
@@ -26,8 +26,35 @@ ActiveRecord::Schema.define(version: 20180116081321) do
     t.string "logo_content_type"
     t.integer "logo_file_size"
     t.datetime "logo_updated_at"
+    t.string "token"
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
   end
-# ---------- No ---------------
+
+  create_table "employees", force: :cascade do |t|
+    t.string "name"
+    t.date "joining_date"
+    t.date "birthdate"
+    t.integer "company_admin_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "employees_projects", force: :cascade do |t|
+    t.integer "employee_id"
+    t.integer "project_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "company_admin_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "password"
@@ -39,6 +66,8 @@ ActiveRecord::Schema.define(version: 20180116081321) do
     t.datetime "logo_updated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
   end
 
 end
