@@ -3,7 +3,8 @@ class CompanyAdmin < ApplicationRecord
   has_many :employees
   
 
-  has_secure_password
+  has_secure_password validations: false
+  validates :password, presence: true
   has_secure_token
   
   validates_confirmation_of :password
