@@ -1,7 +1,5 @@
 class V1::EmployeeProjectsController < ApplicationController
-  before_action :require_login
-  
-  before_action :set_selected_employee 
+  before_action :require_login , :set_selected_employee
 
   def show
     if @employee
@@ -16,12 +14,14 @@ class V1::EmployeeProjectsController < ApplicationController
   end
 
   def update
-    @updated_ids = params[:ids]
-    if @updated_ids.map! { |id| id.to_i }
-      return render json: {message: " Invalid IDs assigned " , status: :unprocessable_entity} if assigning_invalid_ids == true  
-      EmployeesProject.delete_unchecked_projects(@unchecked_ids , params[:employee_id] )     if @unchecked_ids = @employee.project_ids - @updated_ids 
-      EmployeesProject.assign_new_checked_projects(@new_assigned_ids , params[:employee_id] ) if @new_assigned_ids = @updated_ids - @employee.project_ids
+    updated_ids = params[:ids]
+    if updated_ids.map! { |id| id.to_i }
+      EmployeesProject.update_employee_projects(updated_ids , @employee)    
+      # return render json: {message: " Invalid IDs assigned " , status: :unprocessable_entity} if assigning_invalid_ids == true  
       render json: {status: 'SUCCESS', message:'Employee projects has been updated successfully"', data:@employee},status: :ok
+    else
+      EmployeesProject.remove_unchecked_projects( @employee.project_ids , @employee )
+      render json: {data: collection_serializer(@employee.projects , V1::ProjectSerializer)}
     end
   end
 
@@ -32,12 +32,19 @@ class V1::EmployeeProjectsController < ApplicationController
     @employee =  current_user.employees.find_by(id: params[:employee_id])
   end
 
-  def assigning_invalid_ids
-    return false if @updated_ids == ( nil || [0] )
+  # def assigning_invalid_ids
+  #   return false if @updated_ids == ( nil || [0] )
 
-    @updated_ids.each do |id| 
-      return true if !id.in?( current_user.project_ids )    
-    end
+  #   @updated_ids.each do |id| 
+  #     return true if !id.in?( current_user.project_ids )    
+  #   end
   end
-  
-end
+
+
+# def show
+#   render_success( data: ActiveModel::Serializer::CollectionSerializer.new( 
+#       current_company.projects , serializer: V1::EmployeeProjectsSerializer , scope: {emp: @employee}
+#   ))
+# end
+
+

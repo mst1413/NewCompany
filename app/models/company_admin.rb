@@ -2,17 +2,27 @@ class CompanyAdmin < ApplicationRecord
   has_many :projects
   has_many :employees
   
+  attr_accessor :presence_password
 
   has_secure_password validations: false
-  validates :password, presence: true
+  validates :password, presence: true , if: :presence_password 
   has_secure_token
   
   validates_confirmation_of :password
 
-  validates :username, presence: true
-  validates :email, presence: true,
+  validates :username, presence: true , length: { maximum: 15 }, uniqueness: true
+  validates :email, presence: true, length: { :maximum => 40 },uniqueness: true,
             format: /\A[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}\Z/i 
   validates :companyname, presence: true
+
+
+ 
+  # has_attached_file     :logo, styles: { small: "64x64", med: "100x100", large: "200x200" }
+  # validates_attachment  :logo , presence: true,
+  #                        content_type: { :content_type => "image/png" },
+  #                        size:         { :in => 0..100.kilobytes }
+
+
 
   
     def with_unexpired_token(token, period)

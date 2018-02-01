@@ -48,6 +48,7 @@ class V1::PasswordsController < ApplicationController
         if  current_user.authenticate(params[:old_password])
             if  current_user.reset_password!(params[:password], params[:password_confirmation])
                 CompanyAdminMailer.password_change_alert(current_user).deliver_now
+                current_user.presence_password = true
                 render json: {status: 'SUCCESS' ,message: "Your password changed successfully", data: current_user}, status: :ok
             else
                 render json: {status: 'ERROR', message: current_user.errors.full_messages},status: :unprocessable_entity

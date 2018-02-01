@@ -32,7 +32,7 @@
             end
             def update
                 company = current_user
-                if company.update(params.permit(:username, :email, :companyname, :logo))
+                if company.update(params.permit(:username,:password, :email, :companyname, :logo))
                     render json: {status: 'SUCCESS', message:'Saved company', data:company},status: :ok
                     
                 else

@@ -21,6 +21,8 @@ gem 'bcrypt', '~> 3.1.7'
 
 gem 'paperclip'
 
+gem 'active_model_serializers'
+
 gem "letter_opener"
 
 # Use Capistrano for deployment

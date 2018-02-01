@@ -1,17 +1,10 @@
 class V1::TasksController < ApplicationController
 
-    before_action :require_login , :set_company_project || :set_company_employee
+    before_action :require_login , :set_company_project 
     before_action :set_selected_task  , except: [:index , :create]
 
     def index
-        debugger
-        if @project.tasks != []        
-            render json: {status: 'SUCCESS', message:'Loaded tasks', data:@project.tasks},status: :ok 
-        elsif @employee.tasks != []   
-            render json: {status: 'SUCCESS', message:'Loaded tasks', data:@employee.tasks},status: :ok
-        else
-            render json: {message:'The progect or employee dont have tasks'}
-        end
+        render json: {status: 'SUCCESS', message:'Loaded tasks', data:collection_serializer( @project.tasks.order(:id), V1::TaskSerializer)},status: :ok 
     end
 
     def create
@@ -40,10 +33,6 @@ class V1::TasksController < ApplicationController
 
     def set_company_project
         @project = current_user.projects.find(params[:project_id])
-    end
-
-    def set_company_employee
-        @employee = current_user.employees.find(params[:employee_id])
     end
 
     def set_selected_task
