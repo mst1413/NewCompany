@@ -8,18 +8,13 @@ class ApplicationController < ActionController::API
     @current_user ||= authenticate_token
   end
 
-  
-
   # def render_unauthorized(message)
   #   render json: message, status: :unauthorized
   # end
 
   private
-
   def authenticate_token
     token = request.headers['Authorization']
     CompanyAdmin.find_by(token: token)
   end
-        
-
 end

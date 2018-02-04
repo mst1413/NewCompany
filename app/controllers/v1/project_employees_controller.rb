@@ -20,14 +20,11 @@ class V1::ProjectEmployeesController < ApplicationController
       render json: {status: 'SUCCESS',data:  collection_serializer(@project.employees , V1::EmployeeSerializer)},status: :ok
     else
       EmployeesProject.remove_unchecked_employees(@project.employee_ids, @project)
-
     end
   end
 
   private
-  
   def set_selected_project
     @project = current_user.projects.find_by(id: params[:project_id])
   end
-
 end

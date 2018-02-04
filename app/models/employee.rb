@@ -4,7 +4,6 @@ class Employee < ApplicationRecord
   has_many :projects , through: :employees_projects
   has_many :tasks , foreign_key: "assignee_id"
   
-  
   validates :name , :joining_date , :birthdate , presence: true
   validate :over_twenty       
 
