@@ -11,7 +11,9 @@ class V1::TasksController < ApplicationController
   end
 
   def create
-    return render json: {status: 'SUCCESS', message:'New task have been created successfully', data:@new_task},status: :ok if valid_creation
+    @new_task = Task.new(task_params)
+    @project.tasks << @new_task
+    return render json: {status: 'SUCCESS', message:'New task have been created successfully', data:@new_task},status: :ok if @new_task.save
     render json:{message: @new_task.errors.full_messages}
   end
 
@@ -43,11 +45,5 @@ class V1::TasksController < ApplicationController
   
   def project_not_valid
     !current_user.project_ids.include?(params[:project_id].to_i)
-  end
-
-  def valid_creation
-    @new_task = Task.new(task_params)
-    @project.tasks << @new_task
-    @new_task.save
   end
 end

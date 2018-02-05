@@ -22,7 +22,7 @@ class V1::ProjectsController < ApplicationController
 
   def show
     if @project
-      render json: {status: 'SUCCESS', message:'Loaded project', data:@project},status: :ok
+      render json: {status: 'SUCCESS', message:'Loaded project', data: V1::ProjectDetailsSerializer.new(@project)},status: :ok
     else
       render json: {status: 'ERROR', message:"don't have project id #{params[:id]}"},status: :filed
     end 

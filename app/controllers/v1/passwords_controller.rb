@@ -7,7 +7,6 @@ class V1::PasswordsController < ApplicationController
     end
     # @company = ::Company.find_by(
     # email.include?("@") ? { email: email } : { username: email } )
-    @company = CompanyAdmin.find_by(email: email.downcase)
     # if @company 
     #   @company.generate_password_token
     #   CompanyMailer.recover_password_email(@company , @company.password_reset_token).deliver_now
@@ -15,7 +14,7 @@ class V1::PasswordsController < ApplicationController
     # else
     #   render_failed message: 'Email address not found. Please check it and try again.' , status: :not_found
     # end
-
+    @company = CompanyAdmin.find_by(email: email.downcase)
     if @company #.present? && company.confirmed_at?
       @company.generate_password_token!
     # SEND EMAIL HERE

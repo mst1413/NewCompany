@@ -15,7 +15,6 @@ Rails.application.routes.draw do
     end
     resources :employees do
       resource :employee_projects , only: [:show , :update ]
-      resources :tasks
     end
   end
 end

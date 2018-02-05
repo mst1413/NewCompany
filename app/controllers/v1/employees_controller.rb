@@ -22,7 +22,7 @@ class V1::EmployeesController < ApplicationController
   
   def show
     if @employee
-      render json: {status: 'SUCCESS', message:'Loaded employee', data:@employee},status: :ok
+      render json: {status: 'SUCCESS', message:'Loaded employee', data: V1::EmployeeDetailsSerializer.new(@employee)},status: :ok
     else
       render json: {status: 'ERROR', message:"don't have employee id #{params[:id]}"},status: :filed
     end 
