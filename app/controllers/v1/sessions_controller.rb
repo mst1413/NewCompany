@@ -11,11 +11,11 @@ class V1::SessionsController < ApplicationController
   end
 
   def destroy
-    unless current_user
-      render json: {data: 'User already logged out'}
-    else
+    if current_user
       current_user.update_columns(token: nil)
       render json: {status: 'SUCCESS', message:'logout', data: "https://example.com/login"},status: :ok
+    else
+      render json: {data: 'User already logged out'}
     end
       # !current_user.nil? ? current_user.update_columns(token: nil) : render_unauthorized("User already logged out")
       # # # current_user.u1pdate_columns(token: nil)   

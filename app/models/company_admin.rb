@@ -13,10 +13,10 @@ class CompanyAdmin < ApplicationRecord
   validates :email, presence: true, length: { :maximum => 40 },uniqueness: true,
             format: /\A[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}\Z/i 
   
-  # has_attached_file     :logo , styles: { small: "64x64", med: "100x100", large: "200x200" }
-  # validates_attachment  :logo , presence: true 
-  #, size:{ :in => 0..100.kilobytes }
-  #  content_type: { :content_type => "image/png" },
+  has_attached_file :logo , styles: { small: "64x64", med: "100x100", large: "200x200" }
+  validates_attachment :logo , presence: true,
+                        size:{ :in => 0..100.kilobytes },
+                        content_type: { :content_type => "image/jpeg" }
     
   def with_unexpired_token(token, period)
     where(token: token).where('token_created_at >= ?', period).first
